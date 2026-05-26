@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "https://ai-based-automatic-question-generator.onrender.com/";
+const API_BASE = "https://ai-based-automatic-question-generator-1.onrender.com/";
 export const generateQuestions = async (params) => {
   const response = await axios.post(`${API_BASE}/generate`, params);
   return response.data;
