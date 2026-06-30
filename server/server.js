@@ -1,4 +1,6 @@
 require("dotenv").config();
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -21,6 +23,19 @@ app.use("/api/history", historyRoute);
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
+
+// Serve React build if available
+const buildPath = path.join(__dirname, "../client/dist");
+if (fs.existsSync(buildPath)) {
+  app.use(express.static(buildPath));
+
+  app.get("/*", (req, res) => {
+    if (req.path.startsWith("/api")) {
+      return res.status(404).json({ error: "Not found" });
+    }
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+}
 
 // Connect to MongoDB (optional — app works without it)
 mongoose

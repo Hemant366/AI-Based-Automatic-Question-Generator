@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "build-client": "cd ../client && npm install && npm run build",
+    "heroku-postbuild": "npm run build-client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
