@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
     let questions;
 
     if (mode === "ai") {
-      const effectiveKey = apiKey || process.env.GROK_API_KEY;
+      const effectiveKey = apiKey?.trim() || process.env.GROK_API_KEY?.trim();
       questions = await generateAIQuestions(
         topic.trim(),
         parseInt(count),

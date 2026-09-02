@@ -29,7 +29,7 @@ const buildPath = path.join(__dirname, "../client/dist");
 if (fs.existsSync(buildPath)) {
   app.use(express.static(buildPath));
 
-  app.get("/*", (req, res) => {
+  app.use((req, res) => {
     if (req.path.startsWith("/api")) {
       return res.status(404).json({ error: "Not found" });
     }

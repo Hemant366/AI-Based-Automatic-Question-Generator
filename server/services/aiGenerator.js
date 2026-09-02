@@ -1,6 +1,7 @@
 const axios = require("axios");
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
 
 const buildPrompt = (topic, count, difficulty, questionType) => {
   const typeInstruction =
@@ -61,7 +62,7 @@ const generateAIQuestions = async (topic, count, difficulty, questionType, apiKe
     response = await axios.post(
       GROQ_API_URL,
       {
-        model: "llama-3.3-70b-versatile",
+        model: GROQ_MODEL,
         messages: [
           { role: "system", content: "You are an expert educational question generator. Return only valid JSON." },
           { role: "user", content: prompt },
@@ -78,6 +79,9 @@ const generateAIQuestions = async (topic, count, difficulty, questionType, apiKe
   } catch (err) {
     const detail = err.response?.data?.error?.message || err.response?.data?.error || err.message;
     console.error("Groq API error:", JSON.stringify(err.response?.data || err.message));
+    if (err.response?.status === 401) {
+      throw new Error("Groq API key is invalid or expired. Generate a new key at https://console.groq.com/keys and update Settings or server/.env.");
+    }
     throw new Error(`Groq API error: ${detail}`);
   }
 

@@ -10,20 +10,19 @@ export default function HistoryPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    loadHistory();
-  }, []);
+    const loadHistory = async () => {
+      try {
+        const res = await fetchHistory();
+        setHistory(res.history || []);
+      } catch {
+        setError("Could not load history. Make sure the server and MongoDB are running.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const loadHistory = async () => {
-    try {
-      setLoading(true);
-      const res = await fetchHistory();
-      setHistory(res.history || []);
-    } catch {
-      setError("Could not load history. Make sure the server and MongoDB are running.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    void loadHistory();
+  }, []);
 
   const handleOpen = async (id) => {
     try {
