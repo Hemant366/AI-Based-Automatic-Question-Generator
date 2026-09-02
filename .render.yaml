@@ -4,6 +4,10 @@ services:
     env: node
     plan: free
     branch: main
+    permissions:
+      contents: write  # Allow writing to repository contents
+      pages: write
+      id-token: write
     root: server
     buildCommand: npm install
     startCommand: npm start
